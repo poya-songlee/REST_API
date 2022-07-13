@@ -13,7 +13,8 @@ function makeItem(item) {
 		html += `<td class="${header[i]}">${value_}</td>`;
 
 	}
-	html += `<td><span class="update">변경</span><span class="delete">삭제</span></td></tr>`;
+	html += `<td><button type="button" id="updateBtn">변경</button><button type="delete" id="deleteBtn">삭제</button></td></tr>`;
+	
 	return html;
 }
 
@@ -41,14 +42,17 @@ function movePage() {
 }
 
 $(function() {
-
+	const tbody = $("#tbody");
 	movePage();  
 	$("#addBtn").on('click', function() {
-		let form = this.closest("form").querySelectorAll("input");
+
+		let form = this.closest("#addForm").querySelectorAll("input");
 		let item = {};
-		for(let i = 0; i < form.length; i++){
+		for(let i = 0; i < form.length; i++)
 			item[form[i].name] = form[i].value;
-		}
+		
+		if(document.getElementById("tbody").querySelectorAll(".item").length < 1)
+			tbody.children().remove();
 
 		$.ajax(rest_url, {
 			method: "post",
@@ -58,11 +62,9 @@ $(function() {
 			success: result => {
 				const list = result;
 				if(list) {
-					const tbody = $("#tbody");
 					let html = "";
 					html += makeItem(list);
 					tbody.append(html);
-					
 					modal = document.getElementById("addModal");
 		 			modal.classList.toggle("hidden");
 					
@@ -76,15 +78,39 @@ $(function() {
 		});
 	});
 	
-		$("#open").on('click', function() {
-		 modal = document.getElementById("addModal");
-		 modal.classList.toggle("hidden");
-		});
+	$("tbody").on('click','#deleteBtn', function() {
+		let code = this.closest(".item").getAttribute("data-code");
 		
-		$("#close").on('click', function() {
-		 modal = document.getElementById("addModal");
-		 modal.classList.toggle("hidden");
+			$.ajax(rest_url+`/${code}`, {
+			method: "DELETE",
+			contentType: "application/json",
+			dataType: "json",
+			success: result => {
+				
+				if(result) {
+					let tr = this.closest("tr")
+					tr.remove();
+					if(document.getElementById("tbody").querySelectorAll(".item").length < 1){
+						let html = rest_none;
+						tbody.append(html);
+					}
+
+
+				}
+			},
+			error: xhr => alert(`오류 발생: ${xhr.statusText}`)
 		});
+	});
+	
+	$("#open").on('click', function() {
+		modal = document.getElementById("addModal");
+		modal.classList.toggle("hidden");
+	});
+		
+	$("#close").on('click', function() {
+		modal = document.getElementById("addModal");
+		modal.classList.toggle("hidden");
+	});
 
 
 });
