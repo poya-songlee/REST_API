@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!-- JQuery -->
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/js/rest.js"></script>
+<script>
+	const rest_url = "/api";
+	const rest_code= "code";
+</script>
+<style type="text/css">
+
+.modal{
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	position: fixed;
+	top:0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.modal_content{
+	text-align: center;
+	position: relative;
+	background-color: white;
+	border: 1px solid #dddddd;
+	padding: 10px 25px;
+	width: 20%;
+	height: 20%;
+	top: 10%;
+}
+
+.modal_bg{
+	background-color: rgba(0,0,0,0.6);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+.hidden{
+	display: none;
+}
+</style>
+</head>
+<body>
+	<div>
+		<table border="1px">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>이름</th>
+					<th>출판사</th>
+					<th>가격</th>
+					<th>관리</th>
+				</tr>
+			</thead>
+			<tbody id="tbody">
+				<tr>
+					<td colspan="5">등록된 책이 없습니다.</td>
+				</tr>
+			</tbody>
+		</table>
+		<button id="open">등록</button>
+		<div id="addModal" class="modal hidden">
+			<div class="modal_bg"></div>
+			<div class="modal_content">
+				<h3>Modal</h3>
+				<div>
+					<form id="addForm">
+						<div>
+							<label>제목</label>
+							<input type="text" name="name">
+						</div>
+						<div>
+							<label>출판사</label>
+							<input type="text" name="publisher">
+						</div>
+						<div>
+							<label>가격</label>
+							<input type="text" name="price">
+						</div>
+						<div>
+							<button type="button" id="addBtn">확인</button>
+							<button type="button" id="close">close</button>
+						</div>
+					</form>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>
